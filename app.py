@@ -121,6 +121,23 @@ def retourner_colonne(id_annonce):
         return "Aucune annonce trouvée avec cet ID"
 
 
+@app.route("/annonce")
+@app.route("/annonce/mot-cle/")
+def annonce():
+    annonces = select_all_annonce()
+    return render_template("annonce.html", annonces=annonces)
+
+@app.route("/annonce/<genre>")
+def annonce_par_genre(genre):
+    annonces = select_genre_annonce(genre)
+    return render_template("annonce.html", annonces=annonces)
+
+@app.route("/annonce/mot-cle/<mot_cle>")
+def recherche(mot_cle):
+    annonces = recherche_annonce(mot_cle)
+    return render_template("annonce.html", annonces=annonces)
+
+
 if __name__ == '__main__':
     create_table()
     app.run()
