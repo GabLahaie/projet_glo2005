@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Annonces</title>
+    <link rel="stylesheet" type="text/css" href="../static/style2.css">
+</head>
+<body>
+<nav class="navbar">
+    <ul>
+        <li><a href="annonce">Annonces</a></li>
+        <li><a href="/inscription">s'inscrire</a></li>
+        <li><a href="/connexion">se connecter</a></li>
+        <li><a  href="/">Accueil</a></li>
+    </ul>
+</nav>
+
+
+<div>
+
+    <label>Recherche par genre :</label>
+    <select id="filtre_genre" name="genre">
+        <option value="Science-fiction">science-fiction</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="voyage">Voyage</option>
+        <option value="scolaire">Scolaire</option>
+    </select>
+    <button onclick="filtrerAnnonces()">Filtrer par genre</button>
+    <button onclick="enleverFiltre()">Enlever filtre</button>
+</div>
+
+<div>
+    <label>Recherche par nom :</label>
+    <input id="mot-cle" type="text" placeholder="Effectuez une recherche">
+    <button onclick="rechercheMot()">Rechercher</button>
+</div>
+
+
+
+</form>
+
+
+<div>
+    <div>
+        <label>Publier une annonce :</label>
+        <form>
+            <label>Titre annonce : </label>
+            <input type="text">
+            <label>Description : </label>
+            <input type="text">
+            <label><select id="category_selector" name="catégorie">
+                <option value="jeunesse">jeunesse</option>
+                <option value="bande dessinee">bande dessinée</option>
+                <option value="voyage">voyage</option>
+                <option value="scolaire">scolaire</option>
+            </select></label>
+            <label>Prix</label>
+            <input type="number">
+            <label><select name="état">
+                <option value="Neuf">Neuf</option>
+                <option value="Usagé">Usagé</option>
+            </select></label>
+        </form>
+        <button>Publier</button>
+
+    </div>
+
+
+
+
+    <div class="flex-container">
+        {% for annonce in annonces %}
+        <ul class="annonce">
+            <li>Titre : {{annonce[1]}} Prix : {{annonce[5]}} $  Vendeur : {{annonce[6]}}</li>
+            <button onclick="detailsAnnonce({{annonce[0]}})">Description</button>
+            <button>Ajouter au panier</button>
+            <button>Ajouter à la liste de souhait</button>
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+
+    function filtrerAnnonces() {
+        var genre = document.getElementById("filtre_genre").value;
+        window.location.href = "/annonce/" + genre;
+    }
+
+    function enleverFiltre(){
+        window.location.href = "/annonce"
+    }
+
+    function rechercheMot(){
+        const mot_cle = document.getElementById('mot-cle').value;
+        window.location.href = "/annonce/mot-cle/" + mot_cle;
+    }
+</script>
