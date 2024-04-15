@@ -53,6 +53,21 @@ CREATE TABLE if not exists Photos_Annonces (id_photo int auto_increment PRIMARY 
                                              id_annonce int NOT NULL,
                            FOREIGN KEY (id_annonce) REFERENCES Annonces(id_annonce) ON DELETE CASCADE ON UPDATE CASCADE);
 
+
+
+
+#Nouvelle version de table photo, à utiliser si on n'utilisais pas l'autre
+CREATE TABLE if not exists Galerie(id_galerie int auto_increment PRIMARY KEY,
+                                 id_annonce integer,
+                                 FOREIGN KEY (id_annonce) REFERENCES Annonces(id_annonce));
+
+CREATE TABLE if not exists Photo(id_photo int auto_increment PRIMARY KEY ,
+                                 galerie int,
+                                 url_photo varchar(500) DEFAULT 'https://i.pinimg.com/236x/08/e3/c2/08e3c2dbb94e18497e71f9cc5dc42ed4.jpg',
+                                 FOREIGN KEY (galerie) REFERENCES Galerie(id_galerie));
+
+
+
 #Chaque client possède une liste de souhaits
 CREATE TABLE if not exists Listes_Souhaits (id_souhaits int auto_increment PRIMARY KEY,
                                             adresse_utilisateur varchar(100) UNIQUE,
@@ -197,6 +212,29 @@ DELIMITER //
         #END//
 
 DELIMITER ;
+
+DELIMITER //
+
+    CREATE TRIGGER NouvelleGalerie
+        AFTER INSERT ON Annonces
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO Galerie (id_annonce) VALUE (NEW.id_annonce);
+    END //
+DELIMITER ;
+
+SELECT * FROM Galerie;
+SELECT * FROM Photo;
+
+DELIMITER //
+    CREATE TRIGGER NouvellePhoto
+        AFTER INSERT ON Galerie
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO Photo(galerie) VALUE (NEW.id_galerie);
+        END //
+DELIMITER ;
+
 
 
 CREATE INDEX idx_adresse_courriel ON Utilisateurs(adresse_courriel);
